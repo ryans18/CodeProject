@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class InsertSort {
     /*
     * 插入排序，时间复杂度为 O(n²)
+    * 依次排序左边，然后光标向右移动
     * */
     public static void main(String[] args) {
         int [] array = new int[] {12, 9, 4, 4,8,1,5, 10};
