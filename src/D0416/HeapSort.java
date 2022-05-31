@@ -33,18 +33,17 @@ public class HeapSort {
         int left = 2 * index + 1; // 左孩子
         while (left < heapSize) { // 左孩子是否越界-》下边是否还有孩子
             // left + 1 右孩子
-            int larget = left + 1 < heapSize && arr[left] < arr[left + 1] ? left + 1: left;
-            // 自己和孩子谁大，把大的下标给larget
-            larget = arr[larget] > arr[index] ? larget: index;
+            int largest = left + 1 < heapSize && arr[left] < arr[left + 1] ? left + 1: left;
+            // 自己和孩子谁大，把大的下标给largest
+            largest = arr[largest] > arr[index] ? largest: index;
             // 当前值就是最大的，不用heapify了
-            if (larget == index) {
+            if (largest == index) {
                 break;
             }
-            swap(arr, larget, index);
-            index = larget;   // 找到了下面的孩子比自己大， index往下走
+            swap(arr, largest, index);
+            index = largest;   // 找到了下面的孩子比自己大， index往下走
             left = 2 * index + 1;
         }
-
     }
 
     private static void swap(int[] arr, int i, int j) {
