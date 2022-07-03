@@ -6,7 +6,7 @@ public class MaopaoSort {
 
     /*
     *  冒泡排序，时间复杂度为O(n²)，额外空间复杂度O(1)
-    *  一轮，把最大数交换到最右侧，然后继续交换前面的
+    *  一轮，把最大数依次交换到最右侧，然后继续交换前面的
     * */
     public static void main(String[] args) {
         int [] array = new int[] {12, 9, 4, 4,8,1,5, 10};
