@@ -5,7 +5,7 @@ import java.util.Stack;
 /**
  * Author：Ryans
  * Date：Created in 2022/6/26 15:04
- * Introduction： 判断一个链表是否为回文结构： 1， 2， 3， 2， 1
+ * Introduction： 判断一个单链表是否为回文结构： 1， 2， 3， 2， 1
  */
 public class HuiWenLink {
 
@@ -23,7 +23,8 @@ public class HuiWenLink {
         n4.next = n5;
         n5.next = n6;
         n6.next = n7;
-        System.out.println(isHuiLu3(head));
+        System.out.println("is回路：" + isHuiLu3(head));
+        printNode(head, "head");
     }
 
     /**
@@ -49,7 +50,8 @@ public class HuiWenLink {
     }
 
     /**
-     * n / 2，快慢指针找中点
+     * n / 2，快慢指针找中点. 快指针一次走两格，慢指针一次走一格
+     * 只比较前后，空间上消耗小
      * @param head
      * @return
      */
@@ -79,7 +81,7 @@ public class HuiWenLink {
     }
 
     /**
-     * 只用有限几个常数实现，空间复杂度最小
+     * 只用有限几个常数实现，空间复杂度最小，比较考验codding能力，面试时力荐
      * @param head
      * @return
      */
@@ -93,23 +95,62 @@ public class HuiWenLink {
             n1 = n1.next;   // n1 来到中点
             n2 = n2.next.next;  // n2 来到尾部
         }
+        printNode(n1, "n1");
+        printNode(n2, "n2");
         // 后半部分逆序  1, 2, 3, 4, 3, 2, 1
         n2.next = n1.next;
         n1.next = null;  // mid.next 置为null
+//        printNode(n1, "n1");
+//        printNode(n2, "n2");
+
         Node n3 = null;
-        while (n2 != null) {
+        while (n2 != null) { // 右半部分逆序
+            System.out.println("--------------------------------------------------------");
             n3 = n2.next;  // n3 保存下一个node
-            n2.next = n1;
+//            printNode(n3, "n3");
+            n2.next = n1;  // 右边 -next 逆序
             n1 = n2;
             n2 = n3;
+            printNode(n1, "n1");
+            printNode(n2, "n2");
+            printNode(n3, "n3");
         }
-        n3 = n1;
-        n2 = head;
-        System.out.println(n2);
+//        System.out.println("************************************************************");
+//        printNode(n1, "n1");
+//        printNode(n2, "n2");
+//        printNode(n3, "n3");
+        n3 = n1;  // 保存最右边node
+        n2 = head;  // 保存最左边node
+        boolean result = true;
+        while (n1 != null && n2 != null) {
+            if (n1.value != n2.value) {
+                result = false;
+                break;
+            }
+            n1 = n1.next;   // left -> mid
+            n2 = n2.next;  // right -> mid
+        }
+        // 开始复原node
+        n1 = n3.next;
+        n3.next = null;
+        while (n1 != null) {
+            n2 = n1.next;
+            n1.next = n3;
+            n3 = n1;
+            n1 = n2;
+        }
+        return result;
+    }
 
-
-
-        return true;
+    private static void printNode(Node node, String name) {
+        System.out.print(name + ":");
+        int index = 0;
+        while (node != null && index < 20) {
+            System.out.print(node.value + "\t");
+            node = node.next;
+            index++;
+        }
+        System.out.println();
     }
 }
 
