@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class XuanZeSort {
     /*
     * 选择排序， 时间复杂度O(n²)， 额外空间复杂度O(1) ,总共就三个变量(i,j,minIndex)，用完就释放
-    * 每次选取一个最小值放在最左边，然后光标向右移动
+    * 与冒泡排序比较相似，但选择排序一轮只交换依次，冒泡排序是交换相邻的
     * */
     public static void main(String[] args) {
         int [] array = new int[] {12, 9, 4, 4,8,1,5, 10};

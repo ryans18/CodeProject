@@ -1,5 +1,8 @@
 package D0305;
 
+/**
+ * 异或
+ */
 public class D0305YiHuoDemo {
 
     public static void main(String[] args) {
