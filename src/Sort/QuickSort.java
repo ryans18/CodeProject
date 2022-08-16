@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Author : Ryans
  * Date : 2022/8/15
- * Introduction :
+ * Introduction : 快排1.0，每次使得一个数到正确位置即point。
  */
 public class QuickSort {
     public static void main(String[] args) {

@@ -9,7 +9,8 @@ import java.util.Arrays;
  */
 public class HelanGuoqi {
     public static void main(String[] args) {
-        int[] arr = new int[] {4,6,3,7,9,2,5,0,4,5};
+//        int[] arr = new int[] {4,6,3,7,9,2,5,0,4,5};
+        int[] arr = new int[] {7, 3, 5, 8, 1, 5, 9, 0};
         int num = 5;
         gq(arr, 0, arr.length -1, num );
         System.out.println(Arrays.toString(arr));
