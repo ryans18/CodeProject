@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class GuibingSort3 {
 
     public static void main(String[] args) {
-        int[] arr =  new int[]{8,4,5,2,9,6,12};
+        int[] arr =  new int[] {12, 9, 4, 4,8,1,5, 10};
         sort(arr, 0, arr.length - 1);
         System.out.println(Arrays.toString(arr));
     }

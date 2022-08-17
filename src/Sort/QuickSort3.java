@@ -12,10 +12,10 @@ public class QuickSort3 {
         int[] array = new int[] {10, 9, 4, 4, 8, 1, 5, 12};
         quickSort1(array, 0 , array.length - 1);
         System.out.println(Arrays.toString(array));
-        array = new int[] {10, 9, 4, 4, 8, 1, 5, 12};
+        array = new int[] {12, 9, 4, 4,8,1,5, 10};
         quickSort2(array, 0 , array.length - 1);
         System.out.println(Arrays.toString(array));
-        array = new int[] {10, 9, 4, 4, 8, 1, 5, 12};
+        array = new int[] {12, 9, 4, 4,8,1,5, 10};
         quickSort3(array, 0 , array.length - 1);
         System.out.println(Arrays.toString(array));
     }
@@ -45,23 +45,46 @@ public class QuickSort3 {
         }
     }
 
-    // 快排2.0 简化版
+    // 快排2.0 简化版, 目的让num到达正确位置
     private static void quickSort2(int[] arr, int L, int R) {
         if (L < R) {
-            int index = R; // 把大于temp的值放在右侧
-            int p = L;
-            int temp = arr[R];
-            while ( p < index) {
-                if (arr[p] <= temp) {  // 小于等于不动，指针右移
-                    p++;
+            int i = L;
+            int j = R; // 默认R-1所有数都小于等于num
+            int num = arr[R];
+            while (i < j) {
+                if (arr[i] > num) {  // 小于等于不动，指针右移
+                    swap(arr, i, --j);  //交换到右侧,大于区域左移
                 } else {
-                    swap(arr, p, index--);  //交换到右侧
+                    i++;
                 }
             }
+            // 交换最后一个数与大于区域的第一个数
+            swap(arr, R, j);
+//            System.out.println(Arrays.toString(arr));
+//            int potion = partitionOne(arr, L, R);
             // 此时，temp这一个值到了正确位置，左侧是小于等于temp的，右侧是大于temp的
-            quickSort2(arr, L, p - 1);
-            quickSort2(arr, p + 1, R);
+            quickSort2(arr, L, i - 1);
+            quickSort2(arr, i + 1, R);
         }
+    }
+
+    public static int partitionOne(int[] arr, int L, int R) {
+        if (L > R) {
+            return -1;
+        }
+        if (L == R) {
+            return L;
+        }
+        int lessEqual = L - 1;
+        int index = L;
+        while (index < R) {
+            if (arr[index] <= arr[R]) {
+                swap(arr, index, ++lessEqual);
+            }
+            index++;
+        }
+        swap(arr, ++lessEqual, R);
+        return lessEqual;
     }
 
     // 快排3.0，一次把相等的数都排到正确位置，比2.0更快。随机数使得时间复杂度趋近与O(N * LogN)

@@ -23,6 +23,15 @@ public class Sort {
         array = new int[] {12, 9, 4, 4,8,1,5, 10};
         quickSort(array);
         System.out.println("quick Sort: " + Arrays.toString(array));
+        array = new int[] {12, 9, 4, 4,8,1,5, 10};
+        quickSort2(array, 0 , array.length - 1);
+        System.out.println("quick Sort2: " + Arrays.toString(array));
+        array = new int[] {12, 9, 4, 4,8,1,5, 10};
+        guibingSort(array);
+        System.out.println("guibing Sort: " + Arrays.toString(array));
+        array = new int[] {12, 9, 4, 4,8,1,5, 10};
+        heapSort(array);
+        System.out.println("heap Sort: " + Arrays.toString(array));
     }
 
     /**
@@ -73,10 +82,13 @@ public class Sort {
 
     /**
      * 归并排序
+     * 分而治之。
+     * merge:利用一个临时数组，两个指针分别指向左右两侧（middle分开），小于的数放在临时数组中，使得左右两侧小的在前，大的在后
+     * 递归使得所有数，小的在前，大的在后
      * @param arr
      */
     private  static void guibingSort(int[] arr) {
-
+        guibingSort(arr, 0, arr.length - 1);
     }
 
     /**
@@ -86,6 +98,47 @@ public class Sort {
      */
     private  static void quickSort(int[] arr) {
         quickSort(arr, 0, arr.length - 1);
+    }
+
+    /**
+     * 堆排序
+     * 利用大根堆的特性，跟节点最大。每次取出根节点，然后其余数重新生成大根堆
+     * @param arr
+     */
+    private static void heapSort(int[] arr) {
+        // 生成一个大根堆
+        for (int i = 0; i < arr.length; i++) {
+            heapInsert(arr, i);
+        }
+        // 把跟节点与最后一个交换，然后使得前面形成一个新的大根堆
+        for (int i = arr.length - 1; i >= 0; i--) {
+            swap(arr, 0, i);
+            heapify(arr, i);
+        }
+    }
+
+    private static void heapify(int[] arr, int index) {
+        // 从0开始heapify
+        int p = 0;
+        int left = p * 2 + 1;
+        while (left < index) { // 当左孩子在边界内时，如果左孩子都不在范围内，那右孩子就不用看了
+            int largest = left + 1 < index && arr[left + 1] > arr[left] ? left + 1 : left;
+            largest = arr[largest] > arr[p] ? largest : p;
+            if (largest == p){
+                break;
+            }
+            swap(arr, largest, p);
+            p = largest;
+            left = p * 2 + 1;
+        }
+    }
+
+    private static void heapInsert(int[] arr, int index) {
+        // 父节点
+        while (arr[index] > arr[(index - 1) / 2]) {
+            swap(arr,index, (index - 1) /2);
+            index = (index - 1) /2 ;
+        }
     }
 
     private static void quickSort(int[] arr, int left, int right) {
@@ -113,8 +166,56 @@ public class Sort {
         }
     }
 
-    private static void mergeQuickSort() {
+    // 快排2.0，选取一个数num为最右侧的数，然后左侧区域小于num的放左边，大于num放右边，最后交换num与大于区域的第一个数，num就到了正确位置
+    private static void quickSort2(int[] arr, int L, int R) {
+        if (L < R) {
+            int index = R;
+            int p = L;
+            int num = arr[R];
+            while (p < index) {
+                if (arr[p] > num) {
+                    swap(arr, p, --index);
+                } else {
+                    p++;
+                }
+            }
+            swap(arr, R, index);
+            quickSort2(arr, L, index - 1);
+            quickSort2(arr, index + 1, R);
+        }
+    }
 
+    private static void guibingSort(int[] arr ,int L, int R) {
+        if (L < R) {
+            int middle = L + ((R - L) >> 1);
+            guibingSort(arr, L, middle);
+            guibingSort(arr, middle + 1, R);
+            guibingMerge(arr, L, R, middle);
+        }
+    }
+
+    private static void guibingMerge(int[] arr, int L, int R, int middle) {
+        int[] temp = new int[R - L + 1];
+        int i = L;
+        int j = middle + 1;
+        int p = 0;
+        while (i <= middle && j <= R) {
+            if (arr[i] <= arr[j]) {
+                temp[p++] = arr[i++];
+            } else {
+                temp[p++] = arr[j++];
+            }
+        }
+        while (i <= middle) {
+            temp[p++] = arr[i++];
+        }
+
+        while (j <= R) {
+            temp[p++] = arr[j++];
+        }
+        for (int k = 0; k < temp.length; k++) {
+            arr[L + k] = temp[k];
+        }
     }
 
     private static void swap(int[] arr, int i, int j) {
