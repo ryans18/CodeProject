@@ -21,23 +21,26 @@ public class RadixSort2 {
         int[] help = new int[arr.length];
         for (int d = 1; d <= digit; d++) {
             Queue<Integer>[] count  = new LinkedList[10];
+            for (int i = 0; i < count.length; i++) {
+                count[i] = new LinkedList<>();
+            }
             for (int i = 0; i < arr.length; i++) {
                 int num = getDigit(arr[i], d);
                 count[num].add(arr[i]);
             }
-            int num = 0;
-            int h = 0;
-            while (!count[num].isEmpty() && num <= 9) {
-                if (count[num].isEmpty()) {
-                    num++;
-                } else {
-                    help[h++] = count[num].poll();
+
+            int index = 0;
+            for (int i = 0; i < count.length; i++) {
+                Queue<Integer> list = count[i];
+                while (!list.isEmpty()){
+                    help[index++] = list.poll();
                 }
             }
+
             for (int i = 0; i < help.length; i++) {
                 arr[i] = help[i];
             }
-            System.out.println(Arrays.toString(count));
+            System.out.println(Arrays.toString(help));
         }
     }
 

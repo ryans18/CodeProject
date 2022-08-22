@@ -37,6 +37,7 @@ public class Sort {
     /**
      * 插入排序
      * 0,0是有序的，插入一个新的数字[1]，要让增加1的新的数组有序。从而使0,1排序，0,2排序，0,3排序，依次排好序
+     * 从当前索引依次向前使其排好序
      * @param arr
      */
     private static void insertSort(int[] arr) {
@@ -146,6 +147,8 @@ public class Sort {
             int i = left, j = right;
             int point = arr[left];
             while (i < j) {
+                // 疑问： 为什么先右边，后左边
+                // 如果先从左边开始，那么i先到比基准大的数。交换与基准的值，大的数字就跑到了左边。与基准左边小，右边大相悖。
                 while (i < j && arr[j] >= point) {
                     j--;
                 }
@@ -169,7 +172,7 @@ public class Sort {
     // 快排2.0，选取一个数num为最右侧的数，然后左侧区域小于num的放左边，大于num放右边，最后交换num与大于区域的第一个数，num就到了正确位置
     private static void quickSort2(int[] arr, int L, int R) {
         if (L < R) {
-            int index = R;
+            int index = R; // 大于区域右边界，默认左边全为小于等于
             int p = L;
             int num = arr[R];
             while (p < index) {
@@ -179,7 +182,7 @@ public class Sort {
                     p++;
                 }
             }
-            swap(arr, R, index);
+            swap(arr, R, index); // 交换大于区域的第一个数
             quickSort2(arr, L, index - 1);
             quickSort2(arr, index + 1, R);
         }
