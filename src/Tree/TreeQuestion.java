@@ -19,15 +19,39 @@ public class TreeQuestion {
         Node node6 = new Node(6);
         Node node7 = new Node(7);
         node1.left = node2;
-        node1.right = node3;
         node2.left = node4;
         node2.right = node5;
         node4.left = node6;
+        node5.right = node3;
+        node3.right = node7;
 //        node3.left = node6;
 //        node3.right = node7;
-        System.out.println(isBalance(node1));
+//        System.out.println(isBalance(node1));
+        System.out.println(findMinParent(node1, node4, node7).value);
         System.out.println(1 << 2);
     }
+
+    /**
+     * 把大树拆成小树，不断往上
+     * 遇到n1,往上不断返回n1,。遇到n2，往上不断返回n2，否则返回null
+     * A向自己的左树要答案（返回n1，或者n2），
+     * @param head
+     * @param n1
+     * @param n2
+     * @return
+     */
+    private static Node findMinParent(Node head, Node n1, Node n2) {
+        if (head == null || head == n1 || head == n2 ) {
+            return head;
+        }
+        Node left = findMinParent(head.left, n1, n2);
+        Node right = findMinParent(head.right, n1, n2);
+        if (left != null && right != null) {
+            return head;
+        }
+        return left != null ? left : right;
+    }
+
 
     private static boolean isSearchTree(Node node) {
         if (node == null) {
