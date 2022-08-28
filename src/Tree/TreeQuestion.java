@@ -1,7 +1,9 @@
 package Tree;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 /**
  * Author : Ryans
@@ -29,6 +31,11 @@ public class TreeQuestion {
 //        System.out.println(isBalance(node1));
         System.out.println(findMinParent(node1, node4, node7).value);
         System.out.println(1 << 2);
+        System.out.println("######################序列化与反序列化######################################");
+        String serialStr = serialByPre(node1);
+        System.out.println(serialStr);
+        System.out.println(reconByPreStr(serialStr));
+        printAllZhehen(3);
     }
 
     /**
@@ -52,7 +59,7 @@ public class TreeQuestion {
         return left != null ? left : right;
     }
 
-
+    /***********************************************************************************/
     private static boolean isSearchTree(Node node) {
         if (node == null) {
             return false;
@@ -95,7 +102,7 @@ public class TreeQuestion {
             this.max = max;
         }
     }
-
+    /***********************************************************************************/
     // 判断二叉树是否是完全二叉树
     private static ResultWanquan isWanquan(Node node) {
         if (node == null) {
@@ -160,6 +167,7 @@ public class TreeQuestion {
         }
     }
 
+    /***********************************************************************************/
     // 是否为满二叉树
     private static boolean isFull(Node node) {
         return (1 << isF(node).height) - 1 == isF(node).count;
@@ -186,6 +194,7 @@ public class TreeQuestion {
         }
     }
 
+    /***********************************************************************************/
     private static boolean isBalance(Node node) {
         if (node == null) {
             return false;
@@ -218,5 +227,91 @@ public class TreeQuestion {
             this.isBalance = isBalance;
             this.height = height;
         }
+    }
+    /***********************************************************************************/
+
+    private static class NodeHasParent{
+        int value;
+        NodeHasParent left;
+        NodeHasParent right;
+        NodeHasParent parent;
+    }
+
+    // 找到后继节点，中序遍历中下一个节点
+    private static NodeHasParent findNextNode(NodeHasParent node) {
+        if (node == null) {
+            return null;
+        }
+        if (node.right != null) {
+            node = node.right;
+            while (node.left != null) {
+                node = node.left;
+            }
+            return node;
+        } else {
+            NodeHasParent parent = node.parent;
+            while (parent != null && node != parent.left) {
+                node = parent;
+                parent = parent.parent;
+            }
+            return parent;
+        }
+    }
+
+    /***********************************************************************************/
+    // 二叉树的序列化与反序列化
+    private static String serialByPre(Node node) {
+        StringBuffer sb = new StringBuffer();
+        Stack<Node> stack = new Stack<>();
+        stack.push(node);
+        while (!stack.isEmpty()) {
+            node = stack.pop();
+            if (node != null) {
+                sb.append(node.value).append("_");
+                stack.push(node.right);
+                stack.push(node.left);
+            } else {
+                sb.append("#_");
+            }
+        }
+        return sb.toString();
+    }
+
+    private static Node reconByPreStr(String str) {
+        String[] arr = str.split("_");
+        Queue<String> queue = new LinkedList<>();
+        queue.addAll(Arrays.asList(arr));
+        return reconByPre(queue);
+    }
+
+    private static Node reconByPre(Queue<String> queue) {
+        String value = queue.poll();
+        if (value.equals("#")) {
+            return null;
+        }
+        Node head = new Node(value);
+        head.left = reconByPre(queue); // 遇到#退出
+        head.right = reconByPre(queue);
+        return head;
+    }
+
+    /***********************************************************************************/
+
+    private static void printAllZhehen(int max) {
+        printAllZhehen(1, max, true);
+    }
+    /**
+     * 微软原题，打印折痕的凹凸, 中序遍历二叉树，左树为凹，右树为凸
+     * @param index  当前深度
+     * @param max   最大深度
+     * @param down  // true：凹， false： 凸
+     */
+    private static void printAllZhehen(int index, int max, boolean down) {
+        if (index > max) {
+            return;
+        }
+        printAllZhehen(index + 1, max, true);
+        System.out.print(down ? "凹\t" : "凸\t" );
+        printAllZhehen(index + 1, max, false);
     }
 }
