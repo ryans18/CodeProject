@@ -1,5 +1,7 @@
 package graph;
 
+import com.sun.applet2.AppletParameters;
+
 import java.util.*;
 
 /**
@@ -24,7 +26,17 @@ public class GraphQuestion {
                 {2, 5, 100000},
                 {5, 2, 100000}
         });
-        kruskal(graph);
+        kruskal2(graph);
+        Set<Integer> set = new HashSet<>();
+        set.add(0);
+        set.add(1);
+        set.add(34);
+        set.add(39);
+        set.add(55);
+        set.add(108);
+        if (set.contains(34) && set.contains(55)) {
+            System.out.println("same");
+        }
     }
 
     // 宽度优先遍历，利用一个queue和一个set
@@ -95,23 +107,132 @@ public class GraphQuestion {
         }
         return result;
     }
-
+    /******************************************************************************************************************/
     /**
      * 最小生成树-k算法
      */
-    private static void kruskal(Graph graph) {
+    private static Set<Edge> kruskal(Graph graph) {
         List<Edge> edges = new ArrayList<>(graph.edges);
         edges.sort(Comparator.comparingInt(e -> e.weight));
         Set<Node> set = new HashSet<>();
+        MySets mySets = new MySets(new ArrayList<Node>(graph.nodes.values()));
+        Set<Edge> result = new HashSet<>();
         for (Edge edge : edges) {
             Node from = edge.from;
             Node to = edge.to;
-            if (!set.contains(from) || !set.contains(to)) {
-                set.add(from);
-                set.add(to);
-                System.out.print(from.value + "\t");
-                System.out.print(to.value + "\t");
+            if (!mySets.isSameSet(from, to)) {
+                mySets.union(from, to);
+                result.add(edge);
+            }
+        }
+        return result;
+    }
+    /**
+     * 最小生成树-k算法2
+     */
+    private static Set<Edge> kruskal2(Graph graph) {
+        List<Edge> edges = new ArrayList<>(graph.edges);
+        edges.sort(Comparator.comparingInt(e -> e.weight));
+        UnionFind unionFind = new UnionFind();
+        unionFind.makeSets(graph.nodes.values());
+        Set<Edge> result = new HashSet<>();
+        for (Edge edge : edges) {
+            Node from = edge.from;
+            Node to = edge.to;
+            if (!unionFind.isSameSet(from, to)) {
+                unionFind.union(from, to);
+                result.add(edge);
+            }
+        }
+        return result;
+    }
+
+
+    private static class MySets {
+        HashMap<Node, List<Node>> setMap = new HashMap<>(); // 存放节点及所在的集合
+        public MySets(List<Node> nodes) {
+            for (Node node : nodes) {
+                List<Node> set = new ArrayList<>();
+                set.add(node);
+                setMap.put(node, set);
+            }
+        }
+
+        public boolean isSameSet(Node n1, Node n2) {
+            List<Node> nodes1 = setMap.get(n1);
+            List<Node> nodes2 = setMap.get(n2);
+            return nodes1 == nodes2;
+        }
+
+        public void union(Node node1, Node node2) {
+            List<Node> nodes1 = setMap.get(node1);
+            List<Node> nodes2 = setMap.get(node2);
+            for (Node node : nodes2) {
+                nodes1.add(node);
+                setMap.put(node, nodes1);
             }
         }
     }
+
+    // 并查集
+    private static class UnionFind {
+        private HashMap<Node, Node> fatherMap;
+        private HashMap<Node, Integer> sizeMap;
+        public UnionFind() {
+            fatherMap = new HashMap<>();
+            sizeMap = new HashMap<>();
+        }
+        public void makeSets(Collection<Node> nodes) {
+            fatherMap.clear();
+            sizeMap.clear();
+            for (Node node : nodes) {
+                fatherMap.put(node, node);
+                sizeMap.put(node, 1);
+            }
+        }
+
+        private Node findFather(Node node) {
+            Stack<Node> stack = new Stack<>();
+            while (node != fatherMap.get(node)) {
+                stack.add(node);
+                node = fatherMap.get(node);
+            }
+            while (!stack.isEmpty()) {
+                fatherMap.put(stack.pop(), node);
+            }
+            return node;
+        }
+
+        private boolean isSameSet(Node node1, Node node2) {
+            return findFather(node1) == findFather(node2);
+        }
+
+        private void union(Node node1, Node node2) {
+            if (node1 == null || node2 == null) {
+                return;
+            }
+            Node head1 = findFather(node1);
+            Node head2 = findFather(node2);
+            if (head1 != head2) {
+                int size1 = sizeMap.get(head1);
+                int size2 = sizeMap.get(head2);
+                if (size1 >= size2) {
+                    fatherMap.put(head2, head1);
+                    sizeMap.put(head1, size1 + size2);
+                    sizeMap.remove(head2);
+                } else {
+                    fatherMap.put(head1, head2);
+                    sizeMap.put(head2, size1 + size2);
+                    sizeMap.remove(head1);
+                }
+            }
+        }
+    }
+
+    // 工具-数字转为字母
+    private static String value2String (int value) {
+        return String.valueOf((char)(value + 'A' - 1));
+    }
+
+    /******************************************************************************************************************/
 }

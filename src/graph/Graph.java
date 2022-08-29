@@ -27,8 +27,8 @@ public class Graph {
         Graph graph = new Graph();
         for (int i = 0; i < arr.length; i++) {
             int from = arr[i][0];
-            int to = arr[i][0];
-            int weight = arr[i][0];
+            int to = arr[i][1];
+            int weight = arr[i][2];
             if (!graph.nodes.containsKey(from)) {
                 graph.nodes.put(from, new Node(from));
             }
