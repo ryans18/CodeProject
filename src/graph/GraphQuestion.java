@@ -26,7 +26,7 @@ public class GraphQuestion {
                 {2, 5, 100000},
                 {5, 2, 100000}
         });
-        kruskal2(graph);
+        prim(graph);
         Set<Integer> set = new HashSet<>();
         set.add(0);
         set.add(1);
@@ -37,6 +37,7 @@ public class GraphQuestion {
         if (set.contains(34) && set.contains(55)) {
             System.out.println("same");
         }
+        dijkstra(new ArrayList<Node>(graph.nodes.values()).get(0));
     }
 
     // 宽度优先遍历，利用一个queue和一个set
@@ -58,6 +59,7 @@ public class GraphQuestion {
 
 
     // 深度优先遍历，先走一条没走过的路走到底，然后再走其他路
+    // 为什么又把node压回栈中————node可能还有其它next，但刚才break掉了
     private static void deepOrder(Node node) {
         Stack<Node> stack = new Stack<>();
         Set<Node> set = new HashSet<>();
@@ -71,7 +73,7 @@ public class GraphQuestion {
                     stack.push(node);
                     stack.push(next);
                     set.add(next);
-                    System.out.println(node.value);
+                    System.out.println(next.value);
                     break;
                 }
             }
@@ -129,12 +131,14 @@ public class GraphQuestion {
     }
     /**
      * 最小生成树-k算法2
+     * 把所有的边从小到大排序，依次选择最小的边(可能并不在一起)，然后把所有的边合并在一起。如果已经是一个集合就不再加了
+     * (初始，设置每个节点都自成一个集合)
      */
     private static Set<Edge> kruskal2(Graph graph) {
         List<Edge> edges = new ArrayList<>(graph.edges);
         edges.sort(Comparator.comparingInt(e -> e.weight));
         UnionFind unionFind = new UnionFind();
-        unionFind.makeSets(graph.nodes.values());
+//        unionFind.makeSets(graph.nodes.values());
         Set<Edge> result = new HashSet<>();
         for (Edge edge : edges) {
             Node from = edge.from;
@@ -145,6 +149,42 @@ public class GraphQuestion {
             }
         }
         return result;
+    }
+
+    /**
+     * 最小生成树-prim算法
+     * 随机找一个点，标记所有的边并选择最小的边，然后边所指向的to节点，把to节点所有的边标记，然后选择所有标记的最小的边
+     * 通过set判断已经加过的节点时，就不再加这条边
+     * @return
+     */
+    private static Set<Edge> prim(Graph graph) {
+        PriorityQueue<Edge> queue = new PriorityQueue<>(new EdgeComparator());
+        Set<Node> set = new HashSet<>();
+        List<Node> values = new ArrayList<>(graph.nodes.values());
+        Node node = values.get(0);
+        Set<Edge> result = new HashSet<>();
+        if (!set.contains(node)) {
+            set.add(node);
+            queue.addAll(node.edges);
+            while (!queue.isEmpty()) {
+                Edge edge = queue.poll();
+                Node to = edge.to;
+                if (!set.contains(to)) {
+                    queue.addAll(to.edges);
+                    set.add(to);
+                    result.add(edge);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static class EdgeComparator implements Comparator<Edge>{
+
+        @Override
+        public int compare(Edge o1, Edge o2) {
+            return o1.weight - o2.weight;
+        }
     }
 
 
@@ -174,31 +214,19 @@ public class GraphQuestion {
         }
     }
 
-    // 并查集
+    /**
+     * 并查集，解决两个不同的集合合并问题以及判断是否为同一集合
+     * 初始化，所有Node自己为一个集合，
+     */
     private static class UnionFind {
         private HashMap<Node, Node> fatherMap;
-        private HashMap<Node, Integer> sizeMap;
         public UnionFind() {
             fatherMap = new HashMap<>();
-            sizeMap = new HashMap<>();
-        }
-        public void makeSets(Collection<Node> nodes) {
-            fatherMap.clear();
-            sizeMap.clear();
-            for (Node node : nodes) {
-                fatherMap.put(node, node);
-                sizeMap.put(node, 1);
-            }
         }
 
         private Node findFather(Node node) {
-            Stack<Node> stack = new Stack<>();
-            while (node != fatherMap.get(node)) {
-                stack.add(node);
+            while (fatherMap.containsKey(node)) {
                 node = fatherMap.get(node);
-            }
-            while (!stack.isEmpty()) {
-                fatherMap.put(stack.pop(), node);
             }
             return node;
         }
@@ -214,17 +242,7 @@ public class GraphQuestion {
             Node head1 = findFather(node1);
             Node head2 = findFather(node2);
             if (head1 != head2) {
-                int size1 = sizeMap.get(head1);
-                int size2 = sizeMap.get(head2);
-                if (size1 >= size2) {
-                    fatherMap.put(head2, head1);
-                    sizeMap.put(head1, size1 + size2);
-                    sizeMap.remove(head2);
-                } else {
-                    fatherMap.put(head1, head2);
-                    sizeMap.put(head2, size1 + size2);
-                    sizeMap.remove(head1);
-                }
+                fatherMap.put(head2, head1);
             }
         }
     }
@@ -235,4 +253,50 @@ public class GraphQuestion {
     }
 
     /******************************************************************************************************************/
+
+    /**
+     * 迪克特斯拉算法-最短路径(从一个点出发)
+     * 先初始化head到head距离为0，到其它节点为空。然后从head出发，修改to节点的距离。找到一条最短距离，继续to出发，修改它周围节点的距离（d+weight即为head到该节点的距离）
+     * @param head
+     */
+    private static void dijkstra(Node head) {
+        Set<Node> selectSet = new HashSet<>();
+        Map<Node, Integer> distanceMap = new HashMap<>(); // 节点到head的距离
+        distanceMap.put(head, 0);
+        Node minNode = getMinDistanceNotInSet(distanceMap, selectSet);
+        while (minNode != null) {
+            int distance = distanceMap.get(minNode);
+            for (Edge edge : minNode.edges) {
+                Node to = edge.to;
+               if (!selectSet.contains(to)) {
+                   if (distanceMap.containsKey(to)) {
+                       distanceMap.put(to, Math.min(distanceMap.get(to), distance + edge.weight));
+                   } else {
+                       distanceMap.put(to, distance + edge.weight);
+                   }
+               }
+            }
+            selectSet.add(minNode);
+            minNode = getMinDistanceNotInSet(distanceMap, selectSet);
+        }
+        System.out.println(distanceMap);
+    }
+
+    private static Node getMinDistanceNotInSet(Map<Node, Integer> map, Set<Node> set) {
+        int distance = Integer.MAX_VALUE;
+        Node minNode = null;
+        for (Node node : map.keySet()) {
+            if (!set.contains(node) && map.get(node) < distance) {
+                distance = map.get(node);
+                minNode = node;
+            }
+        }
+//        for (Edge edge : head.edges) {
+//            if (!set.contains(edge.to) && edge.weight <= distance) {
+//                distance = edge.weight;
+//                minNode = edge.to;
+//            }
+//        }
+        return minNode;
+    }
 }
