@@ -39,6 +39,7 @@ public class TreeQuestion {
     }
 
     /**
+     * 找到两个节点的最小公共祖先
      * 把大树拆成小树，不断往上
      * 遇到n1,往上不断返回n1,。遇到n2，往上不断返回n2，否则返回null
      * A向自己的左树要答案（返回n1，或者n2），
@@ -60,6 +61,13 @@ public class TreeQuestion {
     }
 
     /***********************************************************************************/
+    /**
+     * 判断二叉树是否为搜索树
+     * head.left < head < head.right
+     * 左边的最大小于 head，右边的最小大于head
+     * @param node
+     * @return
+     */
     private static boolean isSearchTree(Node node) {
         if (node == null) {
             return false;

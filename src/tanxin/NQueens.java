@@ -9,7 +9,7 @@ package tanxin;
 public class NQueens {
     public static void main(String[] args) {
         int n = 11;
-        System.out.println(getNumQueens(n));
+        System.out.println(getNumQueens2(n));
         System.out.println(Integer.MAX_VALUE + 1);
     }
 
@@ -68,7 +68,7 @@ public class NQueens {
             return 0;
         }
         // limit是个位信息。n后面全是1，前面全是0
-        int limit = n == 32? -1 : (1 << n) - 1;
+        int limit = n == 32? -1 : (1 << n) - 1;  // -1的补码是32个1，计算机中使用补码进行运算
         return process2(limit, 0, 0, 0);
     }
 
@@ -90,10 +90,11 @@ public class NQueens {
         int mostRightOne = 0;
         int result = 0;
         while (pos != 0) {
-            mostRightOne = pos & (~pos + 1); // 找到最右侧的1
+            mostRightOne = pos & (~pos + 1); // 找到最右侧以1开头的数
             pos = pos - mostRightOne;
             result += process2(
-                    limit, colLim | mostRightOne,
+                    limit,
+                    colLim | mostRightOne,
                     (leftLim | mostRightOne) << 1,
                     (rightLim | mostRightOne) >>> 1);
         }

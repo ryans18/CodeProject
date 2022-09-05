@@ -17,12 +17,14 @@ public class BinaryTree {
         Node node5 = new Node(5);
         Node node6 = new Node(6);
         Node node7 = new Node(7);
+        Node node8 = new Node(8);
         node1.left = node2;
         node1.right = node3;
         node2.left = node4;
         node2.right = node5;
         node3.left = node6;
         node3.right = node7;
+        node4.right = node8;
         System.out.print("先序：\t");
         pre(node1);
         System.out.print("\n中序：\t");
@@ -46,6 +48,12 @@ public class BinaryTree {
         }
     }
 
+    /**
+     * 中序遍历
+     * 先把node窜到最左节点后(孩子为空)，然后弹出，再把右孩子(此时左孩子为空，右孩子可能不为空)加进来。
+     * 再弹出右孩子,直到右孩子上处理完(node变为null)，
+     * @param node
+     */
     private static void in(Node node) {
         Stack<Node> stack = new Stack<>();
         while (!stack.isEmpty() || node != null) {
