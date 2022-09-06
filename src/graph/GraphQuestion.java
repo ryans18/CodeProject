@@ -37,7 +37,7 @@ public class GraphQuestion {
         if (set.contains(34) && set.contains(55)) {
             System.out.println("same");
         }
-        dijkstra(new ArrayList<Node>(graph.nodes.values()).get(0));
+        dijkstra2(new ArrayList<Node>(graph.nodes.values()).get(0));
     }
 
     // 宽度优先遍历，利用一个queue和一个set
@@ -298,5 +298,45 @@ public class GraphQuestion {
 //            }
 //        }
         return minNode;
+    }
+
+    /******************************************************************************************************************/
+
+    /**
+     * 迪克特斯拉算法2，使用自定义小根堆，优化。
+     */
+    private static void dijkstra2(Node head) {
+        int size = getGraphSize(head);
+        NodeHeap nodeHeap = new NodeHeap(size);
+        Map<Node, Integer> result = new HashMap<>();
+        nodeHeap.addOrUpdateOrIgnore(head, 0);
+        while (!nodeHeap.isEmpty()) {
+            NodeResult nodeResult = nodeHeap.pop();
+            int distance = nodeResult.distance;
+            Node node = nodeResult.node;
+            for (Edge edge : node.edges) {
+                Node to = edge.to;
+                nodeHeap.addOrUpdateOrIgnore(to, distance + edge.weight);
+            }
+            result.put(node, distance);
+        }
+        System.out.println(result);
+    }
+
+    private static int getGraphSize(Node head) {
+        Set<Node> set = new HashSet<>();
+        Queue<Node> queue = new LinkedList<>();
+        set.add(head);
+        queue.add(head);
+        while (!queue.isEmpty()) {
+            Node poll = queue.poll();
+            for (Node next : poll.nexts) {
+                if (!set.contains(next)) {
+                    queue.add(next);
+                    set.add(next);
+                }
+            }
+        }
+        return set.size();
     }
 }
