@@ -3,7 +3,7 @@ package Test;
 /**
  * Author : Ryans
  * Date : 2022/9/16
- * Introduction : 位图
+ * Introduction : 位图——适应于布隆过滤器等。判断ur是否加入过
  */
 public class Bitmap {
 
