@@ -26,6 +26,7 @@ public class OrderStack {
         int[][] result = new int[arr.length][2];
         Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < arr.length; i++) {
+            // 如果还有比栈里的数大的话，栈里的数是从大到小排列的，所以可能会有多个数比当前数小
             while (!stack.isEmpty() && arr[i] > arr[stack.peek()]) { // stack 是单调递减的，所以可能左边多个数的最大值都是当前值。
                 int popIndex = stack.pop();
                 int left = stack.isEmpty() ? -999 : arr[stack.peek()];

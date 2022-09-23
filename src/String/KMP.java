@@ -6,7 +6,7 @@ import java.util.Arrays;
  * Author：Ryans
  * Date：Created in 2022/9/17 18:34
  * Introduction：KMP算法。解决类似indexOf的问题
- *
+ *  str1的i位置与str2的0位置开始比较，直到不相等时，通过next数组直接跳到后缀去比较。
  */
 public class KMP {
 
@@ -14,7 +14,7 @@ public class KMP {
 //        String a = "faafa234559j";
 //        String b = "a234";
 //        System.out.println(indexOf(a, b));
-        String num = "abaajifsabaabs";
+        String num = "baccaabcbaabcdba";
         System.out.println(Arrays.toString(getNextArray(num.toCharArray())));
     }
 
@@ -28,13 +28,13 @@ public class KMP {
         int index2 = 0;
         int[] nums = getMaxPreLengthArray(chars2); // O(M)
         while (index1 < chars1.length && index2 < chars2.length) { // O(N)
-            if (chars1[index1] == chars2[index2]) {
+            if (chars1[index1] == chars2[index2]) {    // 找到一个相等的，直到不相等
                 index1++;
                 index2++;
-            } else if (index2 == 0) {
-                index1 = index1 + 1;
-            } else {
-                index2 = nums[index2];
+            } else if (index2 > 0) {     // 没找到，使用next数组，找到下一个比较小的前缀位置(之前的都相等，前一个前缀一定相等)的下一个。再与str2比较。
+                index2 = nums[index2];   // 变换到移动str2的index到前缀下一个位置。这样效率更快
+            } else {     // index2已经到0了，都没找到，把下标移动到下一个继续比较，寻找相同的前缀
+                index1++;
             }
         }
         // 跳出循环，index1或者index2越界
@@ -62,7 +62,9 @@ public class KMP {
         }
         return nums;
     }
-
+    // 获取前面最大的前缀与后缀长度， 利用已经规定好的num[0], num[1]
+    // compare为已经找到的前缀的后一个数字， 默认为0. compare一定是从0开始。
+    //   abcdyuabcdo -> d为4  -> 通过
     private static int[] getNextArray(char[] chars) {
         int[] nums = new int[chars.length];
         nums[0] = -1;
@@ -74,7 +76,7 @@ public class KMP {
                 if (chars[index - 1] == chars[compare]) { // 相等
                     nums[index++] = ++compare;
                 } else if (compare > 0) {   // 不相等
-                    compare = nums[compare];  // 匹配不上，就继续匹配这个数的前缀数。往前跳
+                    compare = nums[compare];  // 匹配不上，就继续匹配这个数的前缀数。往前跳，直到跳到该位置的数与i-1的数相等，或者跳到0位置
                 } else {   // 不相等 compare = 0   到头了，都没找到，则为0
                     nums[index++] = 0;
                 }
