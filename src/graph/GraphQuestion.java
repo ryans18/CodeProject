@@ -26,7 +26,8 @@ public class GraphQuestion {
                 {2, 5, 100000},
                 {5, 2, 100000}
         });
-        prim(graph);
+        deepOrder2(new ArrayList<Node>(graph.nodes.values()).get(0));
+        /*prim(graph);
         Set<Integer> set = new HashSet<>();
         set.add(0);
         set.add(1);
@@ -37,7 +38,7 @@ public class GraphQuestion {
         if (set.contains(34) && set.contains(55)) {
             System.out.println("same");
         }
-        dijkstra2(new ArrayList<Node>(graph.nodes.values()).get(0));
+        dijkstra2(new ArrayList<Node>(graph.nodes.values()).get(0));*/
     }
 
     // 宽度优先遍历，利用一个queue和一个set
@@ -76,6 +77,16 @@ public class GraphQuestion {
                     System.out.println(next.value);
                     break;
                 }
+            }
+        }
+    }
+
+    // 递归不行，因为图是双向的会不停循环
+    private static void deepOrder2(Node node) {
+        if (node != null) {
+            System.out.println(node.value);
+            for (Node next : node.nexts) {
+                deepOrder2(next);
             }
         }
     }
