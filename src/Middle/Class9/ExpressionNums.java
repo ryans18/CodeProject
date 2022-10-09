@@ -107,12 +107,12 @@ public class ExpressionNums {
         }
         // 0，2，4位位0或1
         for (int i = 0; i < chars.length; i += 2) {
-            if (chars[i] != '0' || chars[i] != '1') {
+            if (chars[i] != '0' && chars[i] != '1') {
                 return false;
             }
         }
         for (int i = 1; i < chars.length; i += 2) {
-            if (chars[i] != '&' || chars[i] != '|' || chars[i] != '^') {
+            if (chars[i] != '&' && chars[i] != '|' && chars[i] != '^') {
                 return false;
             }
         }
