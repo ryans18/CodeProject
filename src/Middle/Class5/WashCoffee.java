@@ -6,4 +6,5 @@ package Middle.Class5;
  * Introduction : 洗咖啡问题
  */
 public class WashCoffee {
+
 }
