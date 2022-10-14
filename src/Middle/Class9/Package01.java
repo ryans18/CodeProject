@@ -37,31 +37,33 @@ public class Package01 {
     }
 
     private static int getMaxValue(int bag, int[] weights, int[] values) {
-        int[][] dp = new int[weights.length + 1][bag + 1];
-       /* for (int i = 1; i < weights.length ; i++) {
-            for (int j = 1; j <= bag; j++) {
-                if (weights[i - 1] > j) {  // 当前重量大于背包重量
+        int[][] dp = new int[weights.length][bag + 1];
+        for (int j = 0; j <= bag; j++) {
+            if (j >= weights[0]) {
+                dp[0][j] = values[0];
+            }
+        }
+        for(int i = 1; i < weights.length; i++) { // 遍历物品
+            for(int j = 0; j <= bag; j++) { // 遍历背包容量
+                if (j < weights[i]) {
                     dp[i][j] = dp[i - 1][j];
                 } else {
-                    int p1 = dp[i - 1][j]; // 不拿i的值与i - 1 相等
-                    int p2 = values[i - 1] + dp[i - 1][j - weights[i - 1]];
-                    int p3 = dp[i - 1][j - weights[i]] + values[i];
-                    // i,j -> i + 1, j + weight[i];
-                    // i - 1, j - weight[
-                    dp[i][j] = Math.max(p1, p3);
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weights[i]] + values[i]);
                 }
             }
-        }*/
+        }
+        return dp[weights.length - 1][bag];
+        /*int[][] dp = new int[weights.length + 1][bag + 1];
+        // 物品多一行，可解决第一行初始化问题
         for(int i = 1; i <= weights.length; i++) { // 遍历物品
             for(int j = 0; j <= bag; j++) { // 遍历背包容量
                 if (j < weights[i - 1]) {
                     dp[i][j] = dp[i - 1][j];
                 } else {
-                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weights[i]] + values[i]);
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weights[i - 1]] + values[i - 1]);
                 }
-
             }
         }
-        return dp[weights.length][bag];
+        return dp[weights.length][bag];*/
     }
 }

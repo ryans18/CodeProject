@@ -34,7 +34,7 @@ public class QuickSort2 {
         int p = L;  // 指针
         int temp = arr[R];
         while (p < j) {
-            if (arr[p] < temp) {  // 找到<, <边界右移，指针右移
+            if (arr[p] < temp) {  // 找到<, <边界右移，指针右移。从左到右的，左边已经是小于temp的值，指针右移
                 swap(arr, p++, ++i);
             } else if (arr[p] > temp) { // 找到>, >边界左移，交换与边界的前一个值，但不知道交换的值的大小，所以还需要处理交换的值，指针不移动
                 swap(arr, p, --j);

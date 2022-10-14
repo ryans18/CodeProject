@@ -3,8 +3,9 @@ package Middle.Class7;
 /**
  * Author：Ryans
  * Date：Created in 2022/10/4 15:03
- * Introduction：获取子数组的最大累加和，子数组是连续的
- * 解决此问题用到的方法：假设答案法。此时还不懂其原理
+ * Introduction：获取子数组的最大累加和，子数组是连续的，可能为0，为负
+ * 解决此问题用到的方法：假设答案法。此时还不懂其原理。
+ * 若数组全是正数。则可用滑动窗口解决。
  */
 public class SubArraySum {
 
@@ -24,5 +25,16 @@ public class SubArraySum {
             }
         }
         return max;
+    }
+
+    // 最长子数组最大累加和为K， 数组中可能有0和负数
+    private static int getMaxSumForK(int[] arr, int k) {
+        return 0;
+    }
+    // 32, -20, 20, 35, -30
+    // k为50
+    // 最长子数组最大累加和为K， 数组中全是正数
+    private static int getMaxSumForKInZheng(int[] arr, int k) {
+        return 0;
     }
 }
