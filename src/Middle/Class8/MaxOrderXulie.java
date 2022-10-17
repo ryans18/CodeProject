@@ -25,7 +25,7 @@ public class MaxOrderXulie {
 
     private static int getMaxOrderList(int[] arr) {
         int[] dp = new int[arr.length]; // dp, 以i位置结尾的最长递增子序列的长度
-        int[] ends = new int[arr.length]; // 有效区域为i+1长度下最小的数字。 初始情况下都为无效区
+        int[] ends = new int[arr.length]; // 有效区域为i+1长度下最小的数字。 初始情况下都为无效区. e
         dp[0] = 1;
         ends[0] = arr[0];
         int index = 0; // ends数组的index
