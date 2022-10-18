@@ -14,4 +14,31 @@ package High;
  */
 public class MaxHuiwen {
 
+    public static void main(String[] args) {
+        String s = "abd8dcbba";
+        System.out.println(getMaxHuiwenSon(s.toCharArray()));
+    }
+
+    private static int getMaxHuiwenSon(char[] str) {
+        int N = str.length;
+        int[][] dp = new int[N][N]; // i到j之间的最长回文
+        for (int i = 0; i < N; i++) {
+            dp[i][i] = 1;  // i=j时为1
+        }
+        for (int j = 1; j < N; j++) {
+            dp[j-1][j] = str[j-1] == str[j] ? 2 : 1;
+        }
+        // 依赖下面的，左边的
+        for (int i = N; i >= 0; i--) {
+            for (int j = i + 2; j < N; j++) {
+                if (str[i] == str[j]) {
+                    dp[i][j] = Math.max(dp[i][j], dp[i+1][j-1] + 2);
+                } else {
+                    dp[i][j] = Math.max(dp[i][j], Math.max(dp[i+1][j], dp[i][j-1]));
+                }
+            }
+        }
+        return dp[0][N-1];
+    }
+
 }
