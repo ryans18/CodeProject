@@ -1,5 +1,8 @@
 package Middle.Class7;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Author：Ryans
  * Date：Created in 2022/10/4 15:03
@@ -15,6 +18,8 @@ public class SubArraySum {
         System.out.println(getMaxSum(arr));
         int[] a = new int[] { 2, 6, 3, 1, 4, 3};
         System.out.println(getMaxSumForKInZheng(a, 14));
+        int[] nums = new int[] {32, -20, 20, 35, -30};
+        System.out.println(getMaxSumForK(nums, 5));
     }
     private static int getMaxSum(int[] arr) {
         int curSum = 0;
@@ -29,11 +34,6 @@ public class SubArraySum {
         return max;
     }
 
-    // 最长子数组最大累加和为K， 数组中可能有0和负数
-    private static int getMaxSumForK(int[] arr, int k) {
-        //TODO
-        return 0;
-    }
     // 32, -20, 20, 35, -30
     // k为50
     // 最长子数组最大累加和为K， 数组中全是正数且无序
@@ -59,5 +59,32 @@ public class SubArraySum {
             }
         }
         return max;
+    }
+
+    // 最长子数组最大累加和为K， 数组中可能有0和负数
+    // 32, -20, 20, 35, -30
+    private static int getMaxSumForK(int[] arr, int k) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        Map<Integer, Integer> map = new HashMap<>(); // sum -> id
+        int maxLen = 0;
+        for (int i = 0, sum = 0; i < arr.length; i++) {
+            sum += arr[i];
+            if (map.containsKey(sum - k)) {  // 找到一个刚好前部分的前缀和与后面加起来等于k
+                maxLen = Math.max(maxLen, i - map.get(sum - k));
+            } else {
+                if (!map.containsKey(sum)) { // 之前的前部分长度更短，减去后就更长
+                    map.put(sum, i);
+                }
+            }
+        }
+        return maxLen;
+    }
+
+    // 最长子数组的最大累加和小于等于k。数组中可能有0和负数
+    //
+    private static int getMaxSumLessRhanK(int[] arr, int k) {
+       return 0;
     }
 }
