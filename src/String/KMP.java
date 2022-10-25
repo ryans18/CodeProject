@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Author：Ryans
  * Date：Created in 2022/9/17 18:34
- * Introduction：KMP算法。解决类似indexOf的问题
+ * Introduction：KMP算法。解决类似indexOf的问题  O(N+M)
  *  str1的i位置与str2的0位置开始比较，直到不相等时，通过next数组直接跳到后缀去比较。
  */
 public class KMP {
@@ -83,5 +83,26 @@ public class KMP {
             }
         }
         return nums;
+    }
+
+    // 暴力尝试，O(N * M)
+    public static int strStr(String haystack, String needle) {
+        if(haystack == null || needle == null || haystack.length() == 0 || needle.length() == 0) {
+            return -1;
+        }
+        char[] str1 = haystack.toCharArray();
+        char[] str2 = needle.toCharArray();
+        for (int i = 0; i < str1.length; i++) {
+            int j = i;
+            int k = 0;
+            while (j < str1.length && k < str2.length && str1[j] == str2[k]) {
+                j++;
+                k++;
+            }
+            if (k == str2.length) {
+                return j - k;
+            }
+        }
+        return -1;
     }
 }

@@ -7,7 +7,7 @@ package D0626;
  */
 public class ReverseLinkList {
 
-    private static class Node {
+    public static class Node {
         int value;
         Node next;
         public Node(int data) {
@@ -68,6 +68,31 @@ public class ReverseLinkList {
             head = next;
         }
         return pre;
+    }
+
+    private static Node reverseLinkedList2(Node head) {
+        Node pre = null;
+        Node cur = head;
+        while (cur != null) {
+            Node next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+        return pre;
+    }
+
+    private static Node reverseLinkedList3(Node head) {
+       return reverse(head, null);
+    }
+
+    private static Node reverse(Node head, Node pre) {
+        if (head == null) {
+            return pre;
+        }
+        Node next = head.next;
+        head.next = pre;
+        return reverse(next, head);
     }
 
     private static DoubleNode reverseDoubleLinkedList(DoubleNode head) {

@@ -44,9 +44,10 @@ public class SubArraySum {
         }
         int sum = arr[0];
         int left = 0;
-        int right = 0;
+//        int right = 0; // 把0加进来，默认包含0位置， 最终用 R-L+1来算长度
         int max = 0;
-        while (right < arr.length) {
+        // [L, R] 左闭右闭。初始为[0,0]
+       /* while (right < arr.length) {
             if (sum == k) {
                 max = Math.max(max, right - left + 1);
                 sum -= arr[left++];
@@ -55,6 +56,16 @@ public class SubArraySum {
                 if (right >= arr.length) break;
                 sum += arr[right];
             } else { // > k
+                sum -= arr[left++];
+            }
+        }*/
+
+        for (int right = 0; right < arr.length; right++) {  // 以i位置结尾
+            sum += arr[right];
+            while (sum <= k) {
+                if (sum == k) {
+                    max = Math.max(max, right - left + 1);
+                }
                 sum -= arr[left++];
             }
         }
