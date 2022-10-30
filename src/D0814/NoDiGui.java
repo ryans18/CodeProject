@@ -1,5 +1,8 @@
 package D0814;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -97,6 +100,32 @@ public class NoDiGui {
         while (!stack2.isEmpty()) {
             node = stack2.pop();
             System.out.print(node.value + "\t");
+        }
+    }
+
+    // 后序：左右中，  根据先序遍历的  中左右， 先遍历左孩子可得到中右左，最后再反转数组得到左右中
+    private static void post2(Node<Integer> node) {
+        Stack<Node<Integer>> stack = new Stack<>();
+        List<Integer> list = new ArrayList<>();
+        stack.push(node);
+        while (!stack.isEmpty()) {
+            node = stack.pop();
+            list.add(node.value);
+            if (node.left != null) {
+                stack.push(node.left);
+            }
+            if (node.right != null) {
+                stack.push(node.right);
+            }
+        }
+        int[] result = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+        for (int i = 0, j = result.length - 1; i < result.length && i < j; i++, j--) {
+            int temp = result[i];
+            result[i] = result[j];
+            result[j] = temp;
         }
     }
 }
