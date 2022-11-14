@@ -1,5 +1,7 @@
 package Middle.Class9;
 
+import java.util.Arrays;
+
 /**
  * Author：Ryans
  * Date：Created in 2022/10/6 18:38
@@ -11,9 +13,9 @@ public class Package01 {
     public static void main(String[] args) {
         int bag = 10;
         int[] weights = new int[] {2, 2, 6, 5, 4};
-        int[] values = {6, 3, 5, 4, 6};
-        System.out.println(packageMoreValue(bag, weights, values));
-        System.out.println(getMaxValue(bag, weights, values));
+        int[] values = {1, 3, 5, 4, 6};
+//        System.out.println(packageMoreValue(bag, weights, values));
+//        System.out.println(getMaxValue(bag, weights, values));
         System.out.println(getMaxValue2(bag, weights, values));
     }
 
@@ -71,10 +73,21 @@ public class Package01 {
     // 一维数组，滚动数组
     private static int getMaxValue2(int bag, int[] weights, int[] values) {
         int[] dp = new int[bag + 1];
+        int[] dp2 = new int[bag + 1];
         for (int i = 0; i < weights.length; i++) {
             for (int j = bag; j >= weights[i]; j--) {
                 dp[j] = Math.max(dp[j], dp[j - weights[i]] + values[i]);
             }
+            System.out.println("dp: " + Arrays.toString(dp));
+        }
+        System.out.println("_____________________");
+        for (int j = bag; j >= 0; j--) {
+            for (int i = 0; i < weights.length; i++) {
+                if(j >= weights[i]) {
+                    dp2[j] = Math.max(dp2[j], dp2[j - weights[i]] + values[i]);
+                }
+            }
+            System.out.println("dp2: " + Arrays.toString(dp2));
         }
         return dp[bag];
     }
