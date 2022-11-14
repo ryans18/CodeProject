@@ -31,7 +31,7 @@ public class WindowQueue {
         while (!queue.isEmpty() && arr[R] > arr[queue.peekLast()]) {
             queue.removeLast();
         }
-        queue.addFirst(R);
+        queue.addLast(R);
         R++;
     }
 
@@ -55,7 +55,7 @@ public class WindowQueue {
     }
 
     public static void main(String[] args) {
-        int[] arr  = new int[] {2,2,4,6,1,0,7};
+        int[] arr  = new int[] {2,4,2,6,1,0,7};
         WindowQueue windowQueue = new WindowQueue(arr);
         windowQueue.addNumFromRight();
         windowQueue.addNumFromRight();

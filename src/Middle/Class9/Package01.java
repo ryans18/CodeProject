@@ -14,6 +14,7 @@ public class Package01 {
         int[] values = {6, 3, 5, 4, 6};
         System.out.println(packageMoreValue(bag, weights, values));
         System.out.println(getMaxValue(bag, weights, values));
+        System.out.println(getMaxValue2(bag, weights, values));
     }
 
     private static int packageMoreValue(int bag, int[] weights, int[] values){
@@ -65,5 +66,16 @@ public class Package01 {
             }
         }
         return dp[weights.length][bag];*/
+    }
+
+    // 一维数组，滚动数组
+    private static int getMaxValue2(int bag, int[] weights, int[] values) {
+        int[] dp = new int[bag + 1];
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = bag; j >= weights[i]; j--) {
+                dp[j] = Math.max(dp[j], dp[j - weights[i]] + values[i]);
+            }
+        }
+        return dp[bag];
     }
 }

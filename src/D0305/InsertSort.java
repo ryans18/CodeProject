@@ -16,6 +16,7 @@ public class InsertSort {
                 System.out.println(Arrays.toString(array));
             }
         }
+        String s = "";
         System.out.println(Arrays.toString(array));
     }
 

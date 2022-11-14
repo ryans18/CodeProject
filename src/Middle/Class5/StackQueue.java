@@ -22,13 +22,21 @@ public class StackQueue {
         System.out.println(queue.peek());
         System.out.println("------------------");
         MyStack<Integer> stack = new MyStack<>();
+        System.out.println(stack.peek());
+        stack.push(1);
         stack.push(2);
+        System.out.println(stack.peek());
+        System.out.println(stack.peek());
+        stack.push(3);
+        System.out.println(stack.peek());
+
+        /*stack.push(2);
         stack.push(5);
         stack.push(9);
         System.out.println(stack.pop());
         System.out.println(stack.pop());
         stack.push(7);
-        System.out.println(stack.pop());
+        System.out.println(stack.pop());*/
     }
 
     /**
@@ -103,6 +111,24 @@ public class StackQueue {
                     queue2.add(queue1.poll());
                 }
                 return queue1.poll();
+            }
+        }
+
+        private T peek() {
+            if (!queue2.isEmpty()) {
+                while (queue2.size() > 1) {
+                    queue1.add(queue2.poll());
+                }
+                T peek = queue2.peek();
+                queue1.add(queue2.poll());
+                return peek;
+            } else {
+                while (queue1.size() > 1) {
+                    queue2.add(queue1.poll());
+                }
+                T peek = queue1.peek();
+                queue2.add(queue1.poll());
+                return peek;
             }
         }
     }
