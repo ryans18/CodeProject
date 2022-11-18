@@ -13,16 +13,17 @@ public class PackageWanquan {
         int[] weights = new int[] {3, 4, 1};
         int[] values = new int[] {20, 30, 15};
         int output = 12;
-        System.out.println(getMaxValue(weights, values, 4));
+//        System.out.println(getMaxValue(weights, values, 4));
 //        System.out.println(testCompletePack(weights, values, 4));
-        System.out.println(getMaxValue2(weights, values, 4));
+//        System.out.println(getMaxValue2(weights, values, 4));
     }
+
 
     // 二维数组, 完全背包要考虑同一行的值；
     private static int getMaxValue(int[] weights, int[] values, int bag) {
         int len = weights.length;
         int[][] dp = new int[len][bag + 1];
-        // 初始化第一行
+        // 不需要初始化第一行
 
         for (int j = 1; j <= bag; j++) {
             for (int i = 0; i < len; i++) {
@@ -37,19 +38,19 @@ public class PackageWanquan {
 
             }
         }
-//        for (int i = 0; i < len; i++) {
-//            for (int j = 1; j <= bag; j++) {
-//                // 先把上一行的值copy下来
-//                if (i > 0) {
-//                    dp[i][j] = dp[i-1][j];
-//                }
-//                // 处理同行问题。
-//                if (j - weights[i] >= 0) {  // 放得下， 放0次，1次。。。
-//                    dp[i][j] = Math.max(dp[i][j], dp[i][j - weights[i]] + values[i]);
-//                }
-//
-//            }
-//        }
+        for (int i = 0; i < len; i++) {
+            for (int j = 1; j <= bag; j++) {
+                // 先把上一行的值copy下来
+                if (i > 0) {
+                    dp[i][j] = dp[i-1][j];
+                }
+                // 处理同行问题。
+                if (j - weights[i] >= 0) {  // 放得下， 放0次，1次。。。
+                    dp[i][j] = Math.max(dp[i][j], dp[i][j - weights[i]] + values[i]);
+                }
+
+            }
+        }
 //        for(int i = 0; i < len; i++) {
 //            System.out.print("\n");
 //            for (int j = 0; j <= bag; j++) {
