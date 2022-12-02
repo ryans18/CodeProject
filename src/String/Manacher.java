@@ -13,6 +13,7 @@ public class Manacher {
     }
 
     private static String getMaxHuiwen(String s) {
+        // 将奇数和偶数都变为奇数，2n+1
         char[] str = manacherStr(s);
         int[] arr = new int[str.length];  // 回文半径数组, 回文半径是包含中心点的，所有最小为1.
         int C = -1;   // 回文中心
