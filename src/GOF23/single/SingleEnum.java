@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
  * Date：Created in 2023/2/12 17:52
  * Introduction：枚举：本身也是一个类
  */
-public enum SingleEnum {
+public  enum SingleEnum {
 
     INSTANCE;
     public static SingleEnum getInstance() {
