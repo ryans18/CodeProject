@@ -13,7 +13,8 @@ public class Customer {
 
     public static void main(String[] args) {
         Customer customer = new Customer();
-        HouseProxy houseProxy = new HouseProxy(new HouseOwner());
-        customer.rentHouse(houseProxy);
+//        HouseProxy houseProxy = new HouseProxy(new HouseOwner());
+//        customer.rentHouse(houseProxy);
+        customer.rentHouse(new RentLogProxy(new HouseProxy(new HouseOwner())));
     }
 }

@@ -9,7 +9,7 @@ import java.lang.reflect.Proxy;
 /**
  * Author : Ryans
  * Date : 2023/2/16
- * Introduction :
+ * Introduction : 动态代理
  */
 public class ObjInvocationHandler implements InvocationHandler {
 

@@ -33,22 +33,25 @@ public class SingleLazy {
         return instance;
     }
 
+    private static volatile SingleLazy instance2;
+
     // 双重检测锁的懒汉式，DCL懒汉式。添加volatile，就不会被指令重排，保证了原子性
     public static SingleLazy getInstance() {
-        if (instance == null) {
+        if (instance2 == null) {
             synchronized (SingleLazy.class) {   // Class对象只有一个
-                if (instance == null) {
-                    instance = new SingleLazy();  // 不是一个原子性操作。
+                if (instance2 == null) {
+                    instance2 = new SingleLazy();  // 不是一个原子性操作。
                     /**原子性：多个操作要么一起成功，要么一起失败。比如一个事务就是原子性。要么都成功，要么回退
                      * 1. 分配内存空间
                      * 2. 执行构造方法
-                     * 3. 把这个对象指向这个空间
-                     * 如果是132，此时instance对象还没完成构造。此时为指令重排
+                     * 3. 将instance2引用指向这个空间
+                     * 正常情况下new SingleLazy()这个操作是1-2-3的。但JVM为了提高效率允许指令重拍。
+                     * 如果是1-3-2，此时instance对象还没完成构造。执行完3后，对象已经指向空间了，再执行2步骤，此时的对象就是空对象。此时为指令重排
                      */
                 }
             }
         }
-        return instance;
+        return instance2;
     }
 
     public static void main(String[] args) throws Exception {

@@ -3,7 +3,7 @@ package GOF23.single;
 /**
  * Author：Ryans
  * Date：Created in 2023/2/12 17:26
- * Introduction：内部类的单例模式
+ * Introduction：内部类的单例模式。加载类的时候不加载内部类，只有在调用时才加载。
  */
 public class SingleInner {
     

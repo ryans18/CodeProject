@@ -7,7 +7,7 @@ package GOF23.adapter;
  */
 public class Netline {
 
-    public void connect() {
+    public void connectNet() {
         System.out.println("通过网线成功上网！");
     }
 }

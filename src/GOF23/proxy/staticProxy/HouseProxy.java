@@ -7,7 +7,7 @@ package GOF23.proxy.staticProxy;
  */
 public class HouseProxy implements Rent{
 
-    private HouseOwner houseOwner;
+    private Rent houseOwner;
 
     public HouseProxy(HouseOwner houseOwner) {
         this.houseOwner = houseOwner;
